@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "VERSION",
     "ext/ffmpeg_video_info/extconf.rb",
     "ext/ffmpeg_video_info/ffmpeg_video_info.c",
+    "ffmpeg-video-info.gemspec",
     "spec/fixtures/test.mp4",
     "spec/spec_helper.rb"
   ]
