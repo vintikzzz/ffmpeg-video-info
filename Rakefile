@@ -15,8 +15,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "ffmpeg-video-info"
   gem.homepage = "http://github.com/vintikzzz/ffmpeg-video-info"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Ruby binding for FFmpeg library}
+  gem.description = %Q{It only provides gathering info about media files}
   gem.email = "fazzzenda@mail.ru"
   gem.authors = ["Pavel Tatarsky"]
   # dependencies defined in Gemfile
