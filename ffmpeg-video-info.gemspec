@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pavel Tatarsky"]
   s.date = "2013-11-30"
-  s.description = "TODO: longer description of your gem"
+  s.description = "It only provides gathering info about media files"
   s.email = "fazzzenda@mail.ru"
   s.extensions = ["ext/ffmpeg_video_info/extconf.rb"]
   s.extra_rdoc_files = [
@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "2.0.5"
-  s.summary = "TODO: one-line summary of your gem"
+  s.summary = "Ruby binding for FFmpeg library"
 
   if s.respond_to? :specification_version then
     s.specification_version = 4
