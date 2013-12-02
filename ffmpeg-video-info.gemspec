@@ -5,14 +5,14 @@
 
 Gem::Specification.new do |s|
   s.name = "ffmpeg-video-info"
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pavel Tatarsky"]
-  s.date = "2013-11-30"
+  s.date = "2013-12-02"
   s.description = "It only provides gathering info about media files"
   s.email = "fazzzenda@mail.ru"
-  s.extensions = ["ext/ffmpeg_video_info/extconf.rb"]
+  s.extensions = ["ffmpeg_video_info"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
