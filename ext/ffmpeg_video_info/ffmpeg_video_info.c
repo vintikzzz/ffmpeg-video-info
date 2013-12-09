@@ -117,21 +117,21 @@ void my_avcodec_string(AVCodecContext *enc, int encode, VALUE res)
 
     switch (enc->codec_type) {
     case AVMEDIA_TYPE_VIDEO:
-        if (enc->pix_fmt != AV_PIX_FMT_NONE) {
-            const char *colorspace_name;
-            // rb_hash_aset(res, rb_str_new2("pixel_format"), rb_str_new2(av_get_pix_fmt_name(enc->pix_fmt)));
-            // if (enc->bits_per_raw_sample &&
-            //     enc->bits_per_raw_sample <= my_av_pix_fmt_desc_get(enc->pix_fmt)->comp[0].depth_minus1)
-            //     av_strlcatf(detail, sizeof(detail), "%d bpc, ", enc->bits_per_raw_sample);
-            // if (enc->color_range != AVCOL_RANGE_UNSPECIFIED)
-            //     av_strlcatf(detail, sizeof(detail),
-            //                 enc->color_range == AVCOL_RANGE_MPEG ? "tv, ": "pc, ");
+        // if (enc->pix_fmt != AV_PIX_FMT_NONE) {
+        //     const char *colorspace_name;
+        //     // rb_hash_aset(res, rb_str_new2("pixel_format"), rb_str_new2(av_get_pix_fmt_name(enc->pix_fmt)));
+        //     // if (enc->bits_per_raw_sample &&
+        //     //     enc->bits_per_raw_sample <= my_av_pix_fmt_desc_get(enc->pix_fmt)->comp[0].depth_minus1)
+        //     //     av_strlcatf(detail, sizeof(detail), "%d bpc, ", enc->bits_per_raw_sample);
+        //     // if (enc->color_range != AVCOL_RANGE_UNSPECIFIED)
+        //     //     av_strlcatf(detail, sizeof(detail),
+        //     //                 enc->color_range == AVCOL_RANGE_MPEG ? "tv, ": "pc, ");
 
-            colorspace_name = av_get_colorspace_name(enc->colorspace);
-            if (colorspace_name)
-              rb_hash_aset(res, rb_str_new2("color_space"), rb_str_new2(colorspace_name));
+        //     colorspace_name = av_get_colorspace_name(enc->colorspace);
+        //     if (colorspace_name)
+        //       rb_hash_aset(res, rb_str_new2("color_space"), rb_str_new2(colorspace_name));
 
-        }
+        // }
         if (enc->width) {
             rb_hash_aset(res, rb_str_new2("width"), INT2FIX(enc->width));
             rb_hash_aset(res, rb_str_new2("height"), INT2FIX(enc->height));
