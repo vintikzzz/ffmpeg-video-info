@@ -2,6 +2,10 @@
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <stdio.h>
+#include <libavutil/opt.h>
+#include <libavutil/dict.h>
+#include <libavutil/pixdesc.h>
+
 
 void my_av_dump_format(AVFormatContext *ic, int index, const char *url, int is_output, VALUE res)
 {
