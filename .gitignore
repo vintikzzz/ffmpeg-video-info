@@ -49,4 +49,4 @@ pkg
 #*.rbc
 
 tmp
-lib
+lib/ffmpeg_video_info.bundle
