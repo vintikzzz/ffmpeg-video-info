@@ -7,83 +7,27 @@
 #include <libavutil/pixdesc.h>
 
 
-void my_av_dump_format(AVFormatContext *ic, int index, const char *url, int is_output, VALUE res)
+void my_dump_metadata(void *ctx, AVDictionary *m, const char *indent, VALUE res)
 {
-    int i;
-    uint8_t *printed = ic->nb_streams ? av_mallocz(ic->nb_streams) : NULL;
-    if (ic->nb_streams && !printed)
-        return;
+    if(m && !(av_dict_count(m) == 1 && av_dict_get(m, "language", NULL, 0))){
+        AVDictionaryEntry *tag=NULL;
 
-    rb_hash_aset(res, rb_str_new2("format_name"), rb_str_new2(ic->iformat->name));
-    rb_hash_aset(res, rb_str_new2("file_name"), rb_str_new2(url));
-    VALUE metadata = rb_hash_new();
-    my_dump_metadata(NULL, ic->metadata, "  ", metadata);
-    rb_hash_aset(res, rb_str_new2("metadata"), metadata);
-    if (!is_output) {
-        if (ic->duration != AV_NOPTS_VALUE) {
-            int hours, mins, secs, us;
-            int64_t duration = ic->duration + 5000;
-            secs = duration / AV_TIME_BASE;
-            us = duration % AV_TIME_BASE;
-            mins = secs / 60;
-            secs %= 60;
-            hours = mins / 60;
-            mins %= 60;
-            // av_log(NULL, AV_LOG_INFO, "%02d:%02d:%02d.%02d", hours, mins, secs,
-            //        (100 * us) / AV_TIME_BASE);
-            rb_hash_aset(res, rb_str_new2("duration"), INT2FIX(hours*3600 + mins*60 + secs));
-        }
-        if (ic->start_time != AV_NOPTS_VALUE) {
-            int secs, us;
-            secs = ic->start_time / AV_TIME_BASE;
-            us = abs(ic->start_time % AV_TIME_BASE);
-            rb_hash_aset(res, rb_str_new2("start"), INT2FIX((int)av_rescale(us, 1000000, AV_TIME_BASE)));
-        }
-        if (ic->bit_rate) {
-            rb_hash_aset(res, rb_str_new2("bitrate"), INT2FIX(ic->bit_rate));
+        while((tag=av_dict_get(m, "", tag, AV_DICT_IGNORE_SUFFIX))) {
+            if(strcmp("language", tag->key)){
+                const char *p = tag->value;
+                while(*p) {
+                    char tmp[256];
+                    size_t len = strcspn(p, "\x8\xa\xb\xc\xd");
+                    av_strlcpy(tmp, p, FFMIN(sizeof(tmp), len+1));
+                    rb_hash_aset(res, rb_str_new2(tag->key), rb_str_new2(tmp));
+                    p += len;
+                    if (*p) p++;
+                }
+            }
         }
     }
-    // for (i = 0; i < ic->nb_chapters; i++) {
-    //     AVChapter *ch = ic->chapters[i];
-    //     av_log(NULL, AV_LOG_INFO, "    Chapter #%d.%d: ", index, i);
-    //     av_log(NULL, AV_LOG_INFO, "start %f, ", ch->start * av_q2d(ch->time_base));
-    //     av_log(NULL, AV_LOG_INFO, "end %f\n",   ch->end   * av_q2d(ch->time_base));
-
-    //     VALUE metadata = rb_hash_new();
-    //     my_dump_metadata(NULL, ch->metadata, "    ", metadata);
-    // }
-    // if(ic->nb_programs) {
-    //     int j, k, total = 0;
-    //     for(j=0; j<ic->nb_programs; j++) {
-    //         AVDictionaryEntry *name = av_dict_get(ic->programs[j]->metadata,
-    //                                               "name", NULL, 0);
-    //         av_log(NULL, AV_LOG_INFO, "  Program %d %s\n", ic->programs[j]->id,
-    //                name ? name->value : "");
-    //         VALUE metadata = rb_hash_new();
-    //         my_dump_metadata(NULL, ic->programs[j]->metadata, "    ", metadata);
-    //         for(k=0; k<ic->programs[j]->nb_stream_indexes; k++) {
-    //             my_dump_stream_format(ic, ic->programs[j]->stream_index[k], index, is_output, res);
-    //             printed[ic->programs[j]->stream_index[k]] = 1;
-    //         }
-    //         total += ic->programs[j]->nb_stream_indexes;
-    //     }
-    //     if (total < ic->nb_streams)
-    //         av_log(NULL, AV_LOG_INFO, "  No Program\n");
-    // }
-    VALUE streams = rb_ary_new();
-    for(i=0;i<ic->nb_streams;i++)
-    {
-        if (!printed[i])
-        {
-            VALUE stream = rb_hash_new();
-            my_dump_stream_format(ic, i, index, is_output, stream);
-            rb_ary_push(streams, stream);
-        }
-    }
-    rb_hash_aset(res, rb_str_new2("streams"), streams);
-
-    av_free(printed);
 }
+
 void my_avcodec_string(AVCodecContext *enc, int encode, VALUE res)
 {
     const char *codec_type;
@@ -206,28 +150,6 @@ void my_avcodec_string(AVCodecContext *enc, int encode, VALUE res)
         rb_hash_aset(res, rb_str_new2("bitrate"), INT2FIX(enc->rc_max_rate));
     }
 }
-int get_bit_rate(AVCodecContext *ctx)
-{
-    int bit_rate;
-    int bits_per_sample;
-
-    switch (ctx->codec_type) {
-    case AVMEDIA_TYPE_VIDEO:
-    case AVMEDIA_TYPE_DATA:
-    case AVMEDIA_TYPE_SUBTITLE:
-    case AVMEDIA_TYPE_ATTACHMENT:
-        bit_rate = ctx->bit_rate;
-        break;
-    case AVMEDIA_TYPE_AUDIO:
-        bits_per_sample = av_get_bits_per_sample(ctx->codec_id);
-        bit_rate = bits_per_sample ? ctx->sample_rate * ctx->channels * bits_per_sample : ctx->bit_rate;
-        break;
-    default:
-        bit_rate = 0;
-        break;
-    }
-    return bit_rate;
-}
 
 void my_dump_stream_format(AVFormatContext *ic, int i, int index, int is_output, VALUE res)
 {
@@ -286,25 +208,106 @@ void my_dump_stream_format(AVFormatContext *ic, int i, int index, int is_output,
     my_dump_metadata(NULL, st->metadata, "    ", metadata);
     rb_hash_aset(res, rb_str_new2("metadata"), metadata);
 }
-void my_dump_metadata(void *ctx, AVDictionary *m, const char *indent, VALUE res)
-{
-    if(m && !(av_dict_count(m) == 1 && av_dict_get(m, "language", NULL, 0))){
-        AVDictionaryEntry *tag=NULL;
 
-        while((tag=av_dict_get(m, "", tag, AV_DICT_IGNORE_SUFFIX))) {
-            if(strcmp("language", tag->key)){
-                const char *p = tag->value;
-                while(*p) {
-                    char tmp[256];
-                    size_t len = strcspn(p, "\x8\xa\xb\xc\xd");
-                    av_strlcpy(tmp, p, FFMIN(sizeof(tmp), len+1));
-                    rb_hash_aset(res, rb_str_new2(tag->key), rb_str_new2(tmp));
-                    p += len;
-                    if (*p) p++;
-                }
-            }
+void my_av_dump_format(AVFormatContext *ic, int index, const char *url, int is_output, VALUE res)
+{
+    int i;
+    uint8_t *printed = ic->nb_streams ? av_mallocz(ic->nb_streams) : NULL;
+    if (ic->nb_streams && !printed)
+        return;
+
+    rb_hash_aset(res, rb_str_new2("format_name"), rb_str_new2(ic->iformat->name));
+    rb_hash_aset(res, rb_str_new2("file_name"), rb_str_new2(url));
+    VALUE metadata = rb_hash_new();
+    my_dump_metadata(NULL, ic->metadata, "  ", metadata);
+    rb_hash_aset(res, rb_str_new2("metadata"), metadata);
+    if (!is_output) {
+        if (ic->duration != AV_NOPTS_VALUE) {
+            int hours, mins, secs, us;
+            int64_t duration = ic->duration + 5000;
+            secs = duration / AV_TIME_BASE;
+            us = duration % AV_TIME_BASE;
+            mins = secs / 60;
+            secs %= 60;
+            hours = mins / 60;
+            mins %= 60;
+            // av_log(NULL, AV_LOG_INFO, "%02d:%02d:%02d.%02d", hours, mins, secs,
+            //        (100 * us) / AV_TIME_BASE);
+            rb_hash_aset(res, rb_str_new2("duration"), INT2FIX(hours*3600 + mins*60 + secs));
+        }
+        if (ic->start_time != AV_NOPTS_VALUE) {
+            int secs, us;
+            secs = ic->start_time / AV_TIME_BASE;
+            us = abs(ic->start_time % AV_TIME_BASE);
+            rb_hash_aset(res, rb_str_new2("start"), INT2FIX((int)av_rescale(us, 1000000, AV_TIME_BASE)));
+        }
+        if (ic->bit_rate) {
+            rb_hash_aset(res, rb_str_new2("bitrate"), INT2FIX(ic->bit_rate));
         }
     }
+    // for (i = 0; i < ic->nb_chapters; i++) {
+    //     AVChapter *ch = ic->chapters[i];
+    //     av_log(NULL, AV_LOG_INFO, "    Chapter #%d.%d: ", index, i);
+    //     av_log(NULL, AV_LOG_INFO, "start %f, ", ch->start * av_q2d(ch->time_base));
+    //     av_log(NULL, AV_LOG_INFO, "end %f\n",   ch->end   * av_q2d(ch->time_base));
+
+    //     VALUE metadata = rb_hash_new();
+    //     my_dump_metadata(NULL, ch->metadata, "    ", metadata);
+    // }
+    // if(ic->nb_programs) {
+    //     int j, k, total = 0;
+    //     for(j=0; j<ic->nb_programs; j++) {
+    //         AVDictionaryEntry *name = av_dict_get(ic->programs[j]->metadata,
+    //                                               "name", NULL, 0);
+    //         av_log(NULL, AV_LOG_INFO, "  Program %d %s\n", ic->programs[j]->id,
+    //                name ? name->value : "");
+    //         VALUE metadata = rb_hash_new();
+    //         my_dump_metadata(NULL, ic->programs[j]->metadata, "    ", metadata);
+    //         for(k=0; k<ic->programs[j]->nb_stream_indexes; k++) {
+    //             my_dump_stream_format(ic, ic->programs[j]->stream_index[k], index, is_output, res);
+    //             printed[ic->programs[j]->stream_index[k]] = 1;
+    //         }
+    //         total += ic->programs[j]->nb_stream_indexes;
+    //     }
+    //     if (total < ic->nb_streams)
+    //         av_log(NULL, AV_LOG_INFO, "  No Program\n");
+    // }
+    VALUE streams = rb_ary_new();
+    for(i=0;i<ic->nb_streams;i++)
+    {
+        if (!printed[i])
+        {
+            VALUE stream = rb_hash_new();
+            my_dump_stream_format(ic, i, index, is_output, stream);
+            rb_ary_push(streams, stream);
+        }
+    }
+    rb_hash_aset(res, rb_str_new2("streams"), streams);
+
+    av_free(printed);
+}
+
+int get_bit_rate(AVCodecContext *ctx)
+{
+    int bit_rate;
+    int bits_per_sample;
+
+    switch (ctx->codec_type) {
+    case AVMEDIA_TYPE_VIDEO:
+    case AVMEDIA_TYPE_DATA:
+    case AVMEDIA_TYPE_SUBTITLE:
+    case AVMEDIA_TYPE_ATTACHMENT:
+        bit_rate = ctx->bit_rate;
+        break;
+    case AVMEDIA_TYPE_AUDIO:
+        bits_per_sample = av_get_bits_per_sample(ctx->codec_id);
+        bit_rate = bits_per_sample ? ctx->sample_rate * ctx->channels * bits_per_sample : ctx->bit_rate;
+        break;
+    default:
+        bit_rate = 0;
+        break;
+    }
+    return bit_rate;
 }
 
 VALUE get_info(VALUE self, VALUE arg)

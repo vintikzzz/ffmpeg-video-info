@@ -3,8 +3,8 @@ require "mkmf"
 have_library('avcodec') or raise
 have_library('avformat') or raise
 
-LIBDIR      = Config::CONFIG['libdir']
-INCLUDEDIR  = Config::CONFIG['includedir']
+LIBDIR      = RbConfig::CONFIG['libdir']
+INCLUDEDIR  = RbConfig::CONFIG['includedir']
 
 HEADER_DIRS = [
   '/usr/local/include',
