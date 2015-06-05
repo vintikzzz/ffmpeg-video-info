@@ -50,3 +50,6 @@ pkg
 
 tmp
 lib/ffmpeg_video_info.bundle
+
+.ffmpeg*
+ports

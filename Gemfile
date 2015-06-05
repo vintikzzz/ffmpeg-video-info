@@ -7,8 +7,10 @@ source "http://rubygems.org"
 # Include everything needed to run rake, tests, features, etc.
 group :development do
   gem "rdoc"
+  gem "rice"
   gem "bundler"
   gem "jeweler"
   gem "rspec"
   gem "rake-compiler"
+  gem "mini_portile"
 end

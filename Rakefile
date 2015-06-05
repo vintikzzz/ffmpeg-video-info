@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler'
 require 'rake/extensiontask'
+require 'mini_portile'
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -35,5 +36,20 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
+recipe = MiniPortile.new('ffmpeg', '2.6.3')
+recipe.files = ['https://github.com/FFmpeg/FFmpeg/archive/n2.6.3.tar.gz']
+recipe.configure_options = []
+task :ffmpeg do
+  checkpoint = ".#{recipe.name}-#{recipe.version}.installed"
+  unless File.exist?(checkpoint)
+    recipe.cook
+    touch checkpoint
+  end
+  recipe.activate
+end
+task :compile => [:ffmpeg, :'compile:ffmpeg_video_info']
+
 require "rake/extensiontask"
-Rake::ExtensionTask.new('ffmpeg_video_info')
+Rake::ExtensionTask.new('ffmpeg_video_info') do |e|
+  e.config_includes = [recipe.path + '/include']
+end
