@@ -36,9 +36,9 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-recipe = MiniPortile.new('ffmpeg', '2.6.3')
-recipe.files = ['https://github.com/FFmpeg/FFmpeg/archive/n2.6.3.tar.gz']
-recipe.configure_options = []
+recipe = MiniPortile.new('ffmpeg', '2.7.1')
+recipe.files = ['https://github.com/FFmpeg/FFmpeg/archive/n2.7.1.tar.gz']
+recipe.configure_options = ['--enable-shared']
 task :ffmpeg do
   checkpoint = ".#{recipe.name}-#{recipe.version}.installed"
   unless File.exist?(checkpoint)
