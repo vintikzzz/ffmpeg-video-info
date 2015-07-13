@@ -1,4 +1,3 @@
-require 'mini_portile'
 module FFmpeg
   Version = '2.7.1'
   module Video
@@ -6,7 +5,5 @@ module FFmpeg
       FFmpegVideoInfoExt.get(path)
     end
   end
-  recipe = MiniPortile.new('ffmpeg', FFmpeg::Version)
-  recipe.activate
 end
 autoload :FFmpegVideoInfoExt, 'ffmpeg_video_info_ext'
