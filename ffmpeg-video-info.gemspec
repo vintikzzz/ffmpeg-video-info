@@ -3,7 +3,7 @@
 # Instead, edit Jeweler::Tasks in Rakefile, and run 'rake gemspec'
 # -*- encoding: utf-8 -*-
 # stub: ffmpeg-video-info 0.2.0 ruby lib
-# stub: ext/ffmpeg_video_info/extconf.rb
+# stub: ext/ffmpeg_video_info_ext/extconf.rb
 
 Gem::Specification.new do |s|
   s.name = "ffmpeg-video-info"
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.date = "2015-07-13"
   s.description = "It only provides gathering info about media files"
   s.email = "fazzzenda@mail.ru"
-  s.extensions = ["ext/ffmpeg_video_info/extconf.rb"]
+  s.extensions = ["ext/ffmpeg_video_info_ext/extconf.rb"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
