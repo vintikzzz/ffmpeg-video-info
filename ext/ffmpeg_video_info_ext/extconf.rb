@@ -1,6 +1,8 @@
 require "mkmf"
 $CXXFLAGS += '-fPIC'
-$LDFLAGS <<" -Wl,-rpath,#{ENV['LIBRARY_PATH']}"
+unless ENV['LIBRARY_PATH'].nil?
+  $LDFLAGS <<" -Wl,-rpath,#{ENV['LIBRARY_PATH']}"
+end
 
 have_library('avcodec') or raise
 have_library('avformat') or raise
