@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler'
 require 'rake/extensiontask'
 require 'mini_portile'
+require './lib/ffmpeg_video_info'
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -36,8 +37,8 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-recipe = MiniPortile.new('ffmpeg', '2.7.1')
-recipe.files = ['https://github.com/FFmpeg/FFmpeg/archive/n2.7.1.tar.gz']
+recipe = MiniPortile.new('ffmpeg', FFmpeg::Version)
+recipe.files = ["https://github.com/FFmpeg/FFmpeg/archive/n#{FFmpeg::Version}.tar.gz"]
 recipe.configure_options = ['--enable-shared']
 task :ffmpeg do
   checkpoint = ".#{recipe.name}-#{recipe.version}.installed"
@@ -47,9 +48,9 @@ task :ffmpeg do
   end
   recipe.activate
 end
-task :compile => [:ffmpeg, :'compile:ffmpeg_video_info']
+task :compile => [:ffmpeg, :'compile:ffmpeg_video_info_ext']
 
 require "rake/extensiontask"
-Rake::ExtensionTask.new('ffmpeg_video_info') do |e|
+Rake::ExtensionTask.new('ffmpeg_video_info_ext') do |e|
   e.config_includes = [recipe.path + '/include']
 end

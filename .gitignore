@@ -49,7 +49,7 @@ pkg
 #*.rbc
 
 tmp
-lib/ffmpeg_video_info.bundle
+lib/ffmpeg_video_info_ext.bundle
 
 .ffmpeg*
 ports

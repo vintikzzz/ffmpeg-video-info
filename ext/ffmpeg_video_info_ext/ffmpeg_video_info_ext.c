@@ -341,8 +341,8 @@ VALUE get_info(VALUE self, VALUE arg)
   return res;
 }
 static VALUE rb_mFFmpegVideoInfo;
-void Init_ffmpeg_video_info()
+void Init_ffmpeg_video_info_ext()
 {
-  rb_mFFmpegVideoInfo = rb_define_module("FFmpegVideoInfo");
+  rb_mFFmpegVideoInfo = rb_define_module("FFmpegVideoInfoExt");
   rb_define_singleton_method(rb_mFFmpegVideoInfo, "get", get_info, 1);
 }
