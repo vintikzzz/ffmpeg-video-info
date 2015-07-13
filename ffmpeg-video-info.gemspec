@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.date = "2015-07-13"
   s.description = "It only provides gathering info about media files"
   s.email = "fazzzenda@mail.ru"
-  s.extensions = ["ext/ffmpeg_video_info/extconf.rb"]
+  s.extensions = ["ext/ffmpeg_video_info_ext/extconf.rb"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
