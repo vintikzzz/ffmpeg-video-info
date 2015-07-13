@@ -22,7 +22,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{It only provides gathering info about media files}
   gem.email = "fazzzenda@mail.ru"
   gem.authors = ["Pavel Tatarsky"]
-  gem.extensions = %w[ext/ffmpeg_video_info/extconf.rb]
+  gem.extensions = %w[ext/ffmpeg_video_info_ext/extconf.rb]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
