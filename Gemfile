@@ -12,5 +12,5 @@ group :development do
   gem "jeweler"
   gem "rspec"
   gem "rake-compiler"
-  gem "mini_portile"
+  gem "mini_portile2"
 end

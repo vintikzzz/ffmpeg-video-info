@@ -37,20 +37,7 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-recipe = MiniPortile.new('ffmpeg', FFmpeg::Version)
-recipe.files = ["https://github.com/FFmpeg/FFmpeg/archive/n#{FFmpeg::Version}.tar.gz"]
-recipe.configure_options = ['--enable-shared']
-task :ffmpeg do
-  checkpoint = ".#{recipe.name}-#{recipe.version}.installed"
-  unless File.exist?(checkpoint)
-    recipe.cook
-    touch checkpoint
-  end
-  recipe.activate
-end
-task :compile => [:ffmpeg, :'compile:ffmpeg_video_info_ext']
+task :compile => [:'compile:ffmpeg_video_info_ext']
 
 require "rake/extensiontask"
-Rake::ExtensionTask.new('ffmpeg_video_info_ext') do |e|
-  e.config_includes = [recipe.path + '/include']
-end
+Rake::ExtensionTask.new('ffmpeg_video_info_ext')
