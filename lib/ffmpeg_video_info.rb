@@ -1,5 +1,4 @@
 module FFmpeg
-  Version = '2.7.1'
   module Video
     def self.info(path)
       FFmpegVideoInfoExt.get(path)
