@@ -1,4 +1,3 @@
-gem 'mini_portile2', '~> 2.0.0' rescue nil
 require 'mkmf'
 require 'fileutils'
 require 'mini_portile2'
