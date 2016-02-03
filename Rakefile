@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'bundler'
 require 'rake/extensiontask'
-require 'mini_portile'
 require './lib/ffmpeg_video_info'
 begin
   Bundler.setup(:default, :development)
