@@ -1,7 +1,6 @@
 source "http://rubygems.org"
 group :development do
   gem "rdoc"
-  gem "rice"
   gem "bundler"
   gem "rspec"
   gem "rake-compiler"
