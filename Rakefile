@@ -6,7 +6,7 @@ begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
   $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
+  $stderr.puts 'Run `bundle install` to install missing gems'
   exit e.status_code
 end
 require 'rake'
@@ -23,5 +23,5 @@ end
 
 task :compile => [:'compile:ffmpeg_video_info_ext']
 
-require "rake/extensiontask"
+require 'rake/extensiontask'
 Rake::ExtensionTask.new('ffmpeg_video_info_ext')

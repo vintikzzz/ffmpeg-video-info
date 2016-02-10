@@ -1,5 +1,10 @@
 require 'mkmf'
 require 'fileutils'
+begin
+  gem 'mini_portile2'
+rescue Gem::LoadError
+  message 'MiniPortile already activated'
+end
 require 'mini_portile2'
 ffmpeg_ver = '2.7.1'
 recipe = MiniPortile.new('ffmpeg', ffmpeg_ver)
