@@ -17,13 +17,13 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
-  s.require_paths = ["lib"]
+  s.require_paths = ['lib']
 
+  s.add_dependency 'mini_portile2'
   s.add_development_dependency 'rdoc'
   s.add_development_dependency 'rice'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'rake-compiler'
-  s.add_development_dependency 'mini_portile2'
 end
