@@ -20,7 +20,7 @@ end
 recipe.activate
 
 $INCFLAGS << " -I#{recipe.path}/include"
-$CXXFLAGS << '-fPIC'
+$CXXFLAGS += '-fPIC'
 $LDFLAGS  <<" -Wl,-rpath,#{File.expand_path(File.dirname(__FILE__))}"
 
 have_library('avcodec') or raise
