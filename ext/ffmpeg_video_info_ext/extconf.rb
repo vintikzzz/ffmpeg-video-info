@@ -6,9 +6,9 @@ rescue Gem::LoadError
   message 'MiniPortile already activated'
 end
 require 'mini_portile2'
-ffmpeg_ver = '2.7.1'
-recipe = MiniPortile.new('ffmpeg', ffmpeg_ver)
-recipe.files = ["https://github.com/FFmpeg/FFmpeg/archive/n#{ffmpeg_ver}.tar.gz"]
+message "Using mini_portile version #{MiniPortile::VERSION}\n"
+recipe = MiniPortile.new('FFmpeg', '2.7.1')
+recipe.files = ["https://codeload.github.com/#{recipe.name}/#{recipe.name}/tar.gz/n#{recipe.version}"]
 recipe.configure_options = ['--enable-shared']
 checkpoint = ".#{recipe.name}-#{recipe.version}.installed"
 unless File.exist?(checkpoint)
