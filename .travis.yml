@@ -16,3 +16,7 @@ matrix:
   # https://github.com/travis-ci/travis-ci/issues/5361
   - os: osx
     rvm: 2.3.0
+
+env:
+  global:
+  - CODECLIMATE_REPO_TOKEN=f3628d3936051e0bc676f02ada2a53bb5388cad4b9d23ec17c11306e30b8ebe7
