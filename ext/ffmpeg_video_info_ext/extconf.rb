@@ -11,7 +11,7 @@ recipe = MiniPortile.new('FFmpeg', '2.7.1')
 file = "https://ffmpeg.org/releases/ffmpeg-#{recipe.version}.tar.gz"
 message "FFmpeg source url #{file}\n"
 recipe.files = [file]
-recipe.configure_options = ['--enable-shared']
+recipe.configure_options = ['--enable-shared', '--disable-yasm']
 checkpoint = ".#{recipe.name}-#{recipe.version}.installed"
 unless File.exist?(checkpoint)
   recipe.cook
