@@ -6,6 +6,7 @@ Ruby binding for FFmpeg library.
 
 {<img src="https://travis-ci.org/vintikzzz/ffmpeg-video-info.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/vintikzzz/ffmpeg-video-info]
 {<img src="https://codeclimate.com/github/vintikzzz/ffmpeg-video-info/badges/gpa.svg" />}[https://codeclimate.com/github/vintikzzz/ffmpeg-video-info]
+{<img src="https://codeclimate.com/github/vintikzzz/ffmpeg-video-info/badges/coverage.svg" />}[https://codeclimate.com/github/vintikzzz/ffmpeg-video-info/coverage]
 {<img src="https://www.versioneye.com/user/projects/56c0c6df18b271003b39137d/badge.svg?style=flat" alt="Dependency Status" />}[https://www.versioneye.com/user/projects/56c0c6df18b271003b39137d]
 
 == Contributing to ffmpeg-video-info
