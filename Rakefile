@@ -2,6 +2,9 @@ require 'rubygems'
 require 'bundler'
 require 'rake/extensiontask'
 require './lib/ffmpeg_video_info'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new
+
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -22,6 +25,8 @@ Rake::RDocTask.new do |rdoc|
 end
 
 task :compile => [:'compile:ffmpeg_video_info_ext']
+task :spec => [:compile]
+task :default => :spec
 
 require 'rake/extensiontask'
 Rake::ExtensionTask.new('ffmpeg_video_info_ext')
