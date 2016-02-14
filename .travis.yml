@@ -10,3 +10,9 @@ rvm:
 os:
 - linux
 - osx
+
+matrix:
+  allow_failures:
+  # https://github.com/travis-ci/travis-ci/issues/5361
+  - os: osx
+    rvm: 2.3.0

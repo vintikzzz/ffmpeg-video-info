@@ -5,4 +5,5 @@ group :development do
   gem "rspec"
   gem "rake-compiler"
   gem "mini_portile2"
+  gem "codeclimate-test-reporter", require: nil
 end
