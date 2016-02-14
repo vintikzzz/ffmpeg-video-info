@@ -20,10 +20,8 @@ end
 recipe.activate
 
 $INCFLAGS << " -I#{recipe.path}/include"
-$CXXFLAGS += '-fPIC'
-unless ENV['LIBRARY_PATH'].nil?
-  $LDFLAGS <<" -Wl,-rpath,#{ENV['LIBRARY_PATH']}:#{File.expand_path(File.dirname(__FILE__))}"
-end
+$CXXFLAGS << '-fPIC'
+$LDFLAGS  <<" -Wl,-rpath,#{File.expand_path(File.dirname(__FILE__))}"
 
 have_library('avcodec') or raise
 have_library('avformat') or raise
