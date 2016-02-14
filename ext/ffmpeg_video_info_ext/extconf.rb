@@ -19,10 +19,11 @@ unless File.exist?(checkpoint)
 end
 recipe.activate
 
-# $CXXFLAGS = '' if $CXXFLAGS.nil?
-# $INCFLAGS << " -I#{recipe.path}/include"
-# $CXXFLAGS << ' -fPIC'
-# $LDFLAGS  << " -Wl,-rpath,#{File.expand_path(File.dirname(__FILE__))}"
+$CXXFLAGS = '' if $CXXFLAGS.nil?
+$INCFLAGS << " -I#{recipe.path}/include"
+$CXXFLAGS << ' -fPIC'
+$LDFLAGS  << " -Wl,-rpath,#{File.expand_path(File.dirname(__FILE__))}"
+$LIBPATH = ["#{recipe.path}/lib"] | $LIBPATH
 
 have_library('avcodec') or raise
 have_library('avformat') or raise
