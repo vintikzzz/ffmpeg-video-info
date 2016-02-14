@@ -8,7 +8,9 @@ end
 require 'mini_portile2'
 message "Using mini_portile version #{MiniPortile::VERSION}\n"
 recipe = MiniPortile.new('FFmpeg', '2.7.1')
-recipe.files = ["https://codeload.github.com/#{recipe.name}/#{recipe.name}/tar.gz/n#{recipe.version}"]
+file = "https://codeload.github.com/#{recipe.name}/#{recipe.name}/tar.gz/n#{recipe.version}"
+message "FFmpeg source url #{file}\n"
+recipe.files = [file]
 recipe.configure_options = ['--enable-shared']
 checkpoint = ".#{recipe.name}-#{recipe.version}.installed"
 unless File.exist?(checkpoint)
